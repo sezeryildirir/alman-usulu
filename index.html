@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alman Usulü - Grup Gider Paylaştırıcı</title>
+    <title>Alman Usulü - Group Expense Splitter</title>
     <style>
         * {
             margin: 0;
@@ -478,31 +478,31 @@
     <div class="container">
         <div class="header">
             <h1>🇩🇪 Alman Usulü</h1>
-            <p class="header-subtitle">Grup giderlerini eşit şekilde paylaştır</p>
+            <p class="header-subtitle">Split group expenses evenly</p>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('events', this)">📋 Etkinlikler</button>
-            <button class="tab-btn" onclick="switchTab('archive', this)">📦 Arşiv</button>
+            <button class="tab-btn active" onclick="switchTab('events', this)">📋 Events</button>
+            <button class="tab-btn" onclick="switchTab('archive', this)">📦 Archive</button>
         </div>
 
         <!-- EVENTS TAB -->
         <div id="events" class="tab-content active">
             <div class="card">
-                <h2>Yeni Etkinlik Oluştur</h2>
+                <h2>Create New Event</h2>
                 <div class="form-group">
-                    <label>Etkinlik Adı</label>
-                    <input type="text" id="eventName" placeholder="örn: Piknik, Hafta Sonu, Tatil...">
+                    <label>Event Name</label>
+                    <input type="text" id="eventName" placeholder="e.g. Picnic, Weekend, Vacation...">
                 </div>
-                <button class="btn-primary" onclick="handleCreateEvent()">✨ Etkinlik Oluştur</button>
+                <button class="btn-primary" onclick="handleCreateEvent()">✨ Create Event</button>
             </div>
 
             <div id="activeEvents" class="card">
-                <h2>Aktif Etkinlikler</h2>
+                <h2>Active Events</h2>
                 <div id="eventsList" class="event-list">
                     <div class="empty-state">
                         <div class="empty-state-icon">📭</div>
-                        <p>Henüz etkinlik yok. Yeni bir etkinlik oluşturun!</p>
+                        <p>No events yet. Create your first one!</p>
                     </div>
                 </div>
             </div>
@@ -511,11 +511,11 @@
         <!-- ARCHIVE TAB -->
         <div id="archive" class="tab-content">
             <div class="card">
-                <h2>Arşivlenmiş Etkinlikler</h2>
+                <h2>Archived Events</h2>
                 <div id="archiveList" class="event-list">
                     <div class="empty-state">
                         <div class="empty-state-icon">📭</div>
-                        <p>Arşivlenmiş etkinlik yok.</p>
+                        <p>No archived events.</p>
                     </div>
                 </div>
             </div>
@@ -545,7 +545,7 @@
                     localStorage.removeItem(test);
                     return true;
                 } catch(e) {
-                    console.log('💾 Veriler bu oturum boyunca hafızada saklanacak (localStorage kapalı)');
+                    console.log('Data will be kept in memory for this session (localStorage unavailable)');
                     return false;
                 }
             }
@@ -556,7 +556,7 @@
                         const saved = localStorage.getItem('alman_usulu_events');
                         return saved ? JSON.parse(saved) : [];
                     } catch(e) {
-                        console.warn('localStorage hatasından hafızaya geçildi');
+                        console.warn('localStorage failed, falling back to memory');
                         return [];
                     }
                 }
@@ -568,7 +568,7 @@
                     try {
                         localStorage.setItem('alman_usulu_events', JSON.stringify(this.events));
                     } catch(e) {
-                        // Hafızada kalıyor, sorun değil
+                        // Stays in memory, no problem
                     }
                 }
             }
@@ -736,7 +736,7 @@
         function handleCreateEvent() {
             const name = document.getElementById('eventName').value.trim();
             if (!name) {
-                alert('Lütfen etkinlik adı girin!');
+                alert('Please enter an event name!');
                 return;
             }
 
@@ -753,7 +753,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">📭</div>
-                        <p>Henüz etkinlik yok. Yeni bir etkinlik oluşturun!</p>
+                        <p>No events yet. Create your first one!</p>
                     </div>
                 `;
                 return;
@@ -764,11 +764,11 @@
                 return `
                     <div class="event-card">
                         <h3>${event.name}</h3>
-                        <p>👥 ${event.participants.length} kişi</p>
-                        <p>💰 Toplam: ${totalSpent.toFixed(2)} ₺</p>
+                        <p>👥 ${event.participants.length} people</p>
+                        <p>💰 Total: $${totalSpent.toFixed(2)}</p>
                         <div class="actions">
-                            <button class="btn-success" onclick="openEventModal('${event.id}')">Detaylar</button>
-                            <button class="btn-danger" onclick="deleteEventConfirm('${event.id}')">Sil</button>
+                            <button class="btn-success" onclick="openEventModal('${event.id}')">Details</button>
+                            <button class="btn-danger" onclick="deleteEventConfirm('${event.id}')">Delete</button>
                         </div>
                     </div>
                 `;
@@ -783,7 +783,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">📭</div>
-                        <p>Arşivlenmiş etkinlik yok.</p>
+                        <p>No archived events.</p>
                     </div>
                 `;
                 return;
@@ -794,11 +794,11 @@
                 return `
                     <div class="event-card" style="opacity: 0.8;">
                         <h3>${event.name}</h3>
-                        <p>👥 ${event.participants.length} kişi</p>
-                        <p>💰 Toplam: ${totalSpent.toFixed(2)} ₺</p>
+                        <p>👥 ${event.participants.length} people</p>
+                        <p>💰 Total: $${totalSpent.toFixed(2)}</p>
                         <div class="actions">
-                            <button class="btn-secondary" onclick="restoreEvent('${event.id}')">Geri Getir</button>
-                            <button class="btn-danger" onclick="deleteEventConfirm('${event.id}')">Kalıcı Sil</button>
+                            <button class="btn-secondary" onclick="restoreEvent('${event.id}')">Restore</button>
+                            <button class="btn-danger" onclick="deleteEventConfirm('${event.id}')">Delete Permanently</button>
                         </div>
                     </div>
                 `;
@@ -820,66 +820,66 @@
 
                 <div class="summary">
                     <div class="summary-item">
-                        <span>Toplam Harcama:</span>
-                        <strong>${totalSpent.toFixed(2)} ₺</strong>
+                        <span>Total Spent:</span>
+                        <strong>$${totalSpent.toFixed(2)}</strong>
                     </div>
                     <div class="summary-item">
-                        <span>Kişi Başına:</span>
-                        <strong>${perPerson.toFixed(2)} ₺</strong>
+                        <span>Per Person:</span>
+                        <strong>$${perPerson.toFixed(2)}</strong>
                     </div>
                 </div>
 
-                <h3>👥 Katılımcılar</h3>
+                <h3>👥 Participants</h3>
                 <div class="form-group">
-                    <input type="text" id="newParticipant" placeholder="Katılımcı adını girin" onkeypress="if(event.key==='Enter') addParticipantToEvent()">
-                    <button class="btn-success" onclick="addParticipantToEvent()">Ekle</button>
+                    <input type="text" id="newParticipant" placeholder="Enter participant name" onkeypress="if(event.key==='Enter') addParticipantToEvent()">
+                    <button class="btn-success" onclick="addParticipantToEvent()">Add</button>
                 </div>
 
                 <div class="participant-list">
-                    ${event.participants.length === 0 ? '<p style="text-align: center; color: #999;">Henüz katılımcı yok</p>' : ''}
+                    ${event.participants.length === 0 ? '<p style="text-align: center; color: #999;">No participants yet</p>' : ''}
                     ${event.participants.map(p => `
                         <div class="participant-item">
                             <div class="participant-info">
                                 <div class="name">${p.name}</div>
-                                <div class="amount">Harcadı: ${p.totalSpent.toFixed(2)} ₺</div>
+                                <div class="amount">Paid: $${p.totalSpent.toFixed(2)}</div>
                             </div>
                             <div class="participant-actions">
-                                <button class="btn-danger" style="padding: 6px 12px;" onclick="removeParticipantFromEvent('${p.id}')">Kaldır</button>
+                                <button class="btn-danger" style="padding: 6px 12px;" onclick="removeParticipantFromEvent('${p.id}')">Remove</button>
                             </div>
                         </div>
                     `).join('')}
                 </div>
 
-                <h3 style="margin-top: 25px;">💸 Giderler</h3>
+                <h3 style="margin-top: 25px;">💸 Expenses</h3>
                 <div class="form-group">
-                    <label>Kim Ödedi?</label>
+                    <label>Who Paid?</label>
                     <select id="expensePayer">
-                        <option value="">Seçin...</option>
+                        <option value="">Select...</option>
                         ${event.participants.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Miktar (₺)</label>
+                    <label>Miktar ($)</label>
                     <input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
                 </div>
                 <div class="form-group">
-                    <label>Açıklama</label>
-                    <input type="text" id="expenseDesc" placeholder="örn: Yemek, Ulaşım..." onkeypress="if(event.key==='Enter') addExpenseToEvent()">
+                    <label>Description</label>
+                    <input type="text" id="expenseDesc" placeholder="e.g. Food, Transport..." onkeypress="if(event.key==='Enter') addExpenseToEvent()">
                 </div>
-                <button class="btn-success" onclick="addExpenseToEvent()">Gider Ekle</button>
+                <button class="btn-success" onclick="addExpenseToEvent()">Add Expense</button>
 
                 <div class="expense-list" style="margin-top: 20px;">
-                    ${event.expenses.length === 0 ? '<p style="text-align: center; color: #999;">Henüz gider yok</p>' : ''}
+                    ${event.expenses.length === 0 ? '<p style="text-align: center; color: #999;">No expenses yet</p>' : ''}
                     ${event.expenses.map(e => {
                         const payer = event.participants.find(p => p.id === e.participantId);
                         return `
                             <div class="expense-item">
                                 <div class="expense-info">
-                                    <div class="payer">${payer ? payer.name : 'Bilinmiyor'}</div>
+                                    <div class="payer">${payer ? payer.name : 'Unknown'}</div>
                                     <div class="description">${e.description}</div>
-                                    <div class="amount">${e.amount.toFixed(2)} ₺</div>
+                                    <div class="amount">$${e.amount.toFixed(2)}</div>
                                 </div>
-                                <button class="btn-danger" style="padding: 6px 12px; height: fit-content;" onclick="removeExpenseFromEvent('${e.id}')">Sil</button>
+                                <button class="btn-danger" style="padding: 6px 12px; height: fit-content;" onclick="removeExpenseFromEvent('${e.id}')">Delete</button>
                             </div>
                         `;
                     }).join('')}
@@ -888,12 +888,12 @@
 
             if (settlements.length > 0) {
                 html += `
-                    <h3 style="margin-top: 25px;">✅ Ödenmesi Gereken</h3>
+                    <h3 style="margin-top: 25px;">✅ Who Owes Whom</h3>
                     <div>
                         ${settlements.map(s => `
                             <div class="settlement">
                                 <span>${s.from} <strong>→</strong> ${s.to}</span>
-                                <strong>${s.amount} ₺</strong>
+                                <strong>$${s.amount}</strong>
                             </div>
                         `).join('')}
                     </div>
@@ -902,8 +902,8 @@
 
             html += `
                 <div style="margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn-warning" onclick="archiveEventConfirm('${eventId}')">📦 Arşivle</button>
-                    <button class="btn-danger" onclick="deleteEventConfirm('${eventId}')">🗑️ Sil</button>
+                    <button class="btn-warning" onclick="archiveEventConfirm('${eventId}')">📦 Archive</button>
+                    <button class="btn-danger" onclick="deleteEventConfirm('${eventId}')">🗑️ Delete</button>
                 </div>
             `;
 
@@ -919,7 +919,7 @@
         function addParticipantToEvent() {
             const name = document.getElementById('newParticipant').value.trim();
             if (!name) {
-                alert('Katılımcı adı girin!');
+                alert('Please enter a participant name!');
                 return;
             }
             app.addParticipant(app.currentEventId, name);
@@ -928,7 +928,7 @@
         }
 
         function removeParticipantFromEvent(participantId) {
-            if (confirm('Bu katılımcıyı kaldırmak istediğinize emin misiniz?')) {
+            if (confirm('Remove this participant?')) {
                 app.removeParticipant(app.currentEventId, participantId);
                 openEventModal(app.currentEventId);
             }
@@ -940,15 +940,15 @@
             const description = document.getElementById('expenseDesc').value.trim();
 
             if (!payerId) {
-                alert('Lütfen ödeyeni seçin!');
+                alert('Please select who paid!');
                 return;
             }
             if (!amount || parseFloat(amount) <= 0) {
-                alert('Lütfen geçerli bir miktar girin!');
+                alert('Please enter a valid amount!');
                 return;
             }
             if (!description) {
-                alert('Lütfen açıklama girin!');
+                alert('Please enter a description!');
                 return;
             }
 
@@ -960,14 +960,14 @@
         }
 
         function removeExpenseFromEvent(expenseId) {
-            if (confirm('Bu gideri silmek istediğinize emin misiniz?')) {
+            if (confirm('Delete this expense?')) {
                 app.removeExpense(app.currentEventId, expenseId);
                 openEventModal(app.currentEventId);
             }
         }
 
         function archiveEventConfirm(eventId) {
-            if (confirm('Bu etkinliği arşivlemek istediğinize emin misiniz?')) {
+            if (confirm('Archive this event?')) {
                 app.archiveEvent(eventId);
                 closeEventModal();
                 renderEventsList();
@@ -975,7 +975,7 @@
         }
 
         function restoreEvent(eventId) {
-            if (confirm('Bu etkinliği geri getirmek istediğinize emin misiniz?')) {
+            if (confirm('Restore this event?')) {
                 const event = app.getEvent(eventId);
                 if (event) {
                     event.archived = false;
@@ -986,7 +986,7 @@
         }
 
         function deleteEventConfirm(eventId) {
-            if (confirm('Bu etkinliği kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
+            if (confirm('Permanently delete this event? This cannot be undone!')) {
                 app.deleteEvent(eventId);
                 closeEventModal();
                 renderEventsList();
