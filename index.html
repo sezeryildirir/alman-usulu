@@ -494,7 +494,7 @@
                     <label>Etkinlik Adı</label>
                     <input type="text" id="eventName" placeholder="örn: Piknik, Hafta Sonu, Tatil...">
                 </div>
-                <button class="btn-primary" onclick="createEvent()">✨ Etkinlik Oluştur</button>
+                <button class="btn-primary" onclick="handleCreateEvent()">✨ Etkinlik Oluştur</button>
             </div>
 
             <div id="activeEvents" class="card">
@@ -733,7 +733,7 @@
             }
         }
 
-        function createEvent() {
+        function handleCreateEvent() {
             const name = document.getElementById('eventName').value.trim();
             if (!name) {
                 alert('Lütfen etkinlik adı girin!');
