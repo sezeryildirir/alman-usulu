@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alman Usulü - Grup Gider Paylaştırıcı</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .card h3 {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-warning {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #FFC700;
+        }
+
+        .btn-secondary {
+            background: #a0aec0;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #718096;
+        }
+
+        .event-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .event-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .event-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .event-card p {
+            opacity: 0.9;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .event-card .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .event-card button {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .participant-list {
+            margin: 20px 0;
+        }
+
+        .participant-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-info .name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .participant-info .amount {
+            color: #667eea;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .participant-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .participant-actions button {
+            padding: 8px 12px;
+            font-size: 0.9em;
+        }
+
+        .expense-list {
+            margin: 20px 0;
+        }
+
+        .expense-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #48bb78;
+        }
+
+        .expense-item.archived {
+            opacity: 0.6;
+        }
+
+        .expense-info {
+            flex: 1;
+        }
+
+        .expense-info .payer {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .expense-info .description {
+            color: #666;
+            font-size: 0.95em;
+            margin: 5px 0;
+        }
+
+        .expense-info .amount {
+            color: #48bb78;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .expense-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .settlement {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1.05em;
+            text-align: center;
+        }
+
+        .settlement strong {
+            display: block;
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        .summary {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item strong {
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .event-list {
+                grid-template-columns: 1fr;
+            }
+
+            .participant-item,
+            .expense-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .participant-actions,
+            .expense-actions {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .participant-actions button,
+            .expense-actions button {
+                flex: 1;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+            padding: 0;
+            width: auto;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #48bb78;
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #742a2a;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f56565;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇩🇪 Alman Usulü</h1>
+            <p class="header-subtitle">Grup giderlerini eşit şekilde paylaştır</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('events', this)">📋 Etkinlikler</button>
+            <button class="tab-btn" onclick="switchTab('archive', this)">📦 Arşiv</button>
+        </div>
+
+        <!-- EVENTS TAB -->
+        <div id="events" class="tab-content active">
+            <div class="card">
+                <h2>Yeni Etkinlik Oluştur</h2>
+                <div class="form-group">
+                    <label>Etkinlik Adı</label>
+                    <input type="text" id="eventName" placeholder="örn: Piknik, Hafta Sonu, Tatil...">
+                </div>
+                <button class="btn-primary" onclick="createEvent()">✨ Etkinlik Oluştur</button>
+            </div>
+
+            <div id="activeEvents" class="card">
+                <h2>Aktif Etkinlikler</h2>
+                <div id="eventsList" class="event-list">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>Henüz etkinlik yok. Yeni bir etkinlik oluşturun!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARCHIVE TAB -->
+        <div id="archive" class="tab-content">
+            <div class="card">
+                <h2>Arşivlenmiş Etkinlikler</h2>
+                <div id="archiveList" class="event-list">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>Arşivlenmiş etkinlik yok.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EVENT DETAIL MODAL -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeEventModal()">&times;</button>
+            <div id="eventDetailContent"></div>
+        </div>
+    </div>
+
+    <script>
+        class AlmanUsulu {
+            constructor() {
+                this.useLocalStorage = this.checkLocalStorage();
+                this.events = this.loadEvents();
+                this.currentEventId = null;
+            }
+
+            checkLocalStorage() {
+                try {
+                    const test = '__test__';
+                    localStorage.setItem(test, test);
+                    localStorage.removeItem(test);
+                    return true;
+                } catch(e) {
+                    console.log('💾 Veriler bu oturum boyunca hafızada saklanacak (localStorage kapalı)');
+                    return false;
+                }
+            }
+
+            loadEvents() {
+                if (this.useLocalStorage) {
+                    try {
+                        const saved = localStorage.getItem('alman_usulu_events');
+                        return saved ? JSON.parse(saved) : [];
+                    } catch(e) {
+                        console.warn('localStorage hatasından hafızaya geçildi');
+                        return [];
+                    }
+                }
+                return [];
+            }
+
+            saveEvents() {
+                if (this.useLocalStorage) {
+                    try {
+                        localStorage.setItem('alman_usulu_events', JSON.stringify(this.events));
+                    } catch(e) {
+                        // Hafızada kalıyor, sorun değil
+                    }
+                }
+            }
+
+            generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+
+            createEvent(name) {
+                const event = {
+                    id: this.generateId(),
+                    name: name,
+                    createdAt: new Date().toISOString(),
+                    participants: [],
+                    expenses: [],
+                    archived: false
+                };
+                this.events.push(event);
+                this.saveEvents();
+                return event;
+            }
+
+            getEvent(id) {
+                return this.events.find(e => e.id === id);
+            }
+
+            addParticipant(eventId, name) {
+                const event = this.getEvent(eventId);
+                if (event) {
+                    event.participants.push({
+                        id: this.generateId(),
+                        name: name,
+                        totalSpent: 0
+                    });
+                    this.saveEvents();
+                }
+            }
+
+            removeParticipant(eventId, participantId) {
+                const event = this.getEvent(eventId);
+                if (event) {
+                    event.participants = event.participants.filter(p => p.id !== participantId);
+                    event.expenses = event.expenses.filter(e => e.participantId !== participantId);
+                    this.saveEvents();
+                }
+            }
+
+            addExpense(eventId, participantId, amount, description) {
+                const event = this.getEvent(eventId);
+                if (event) {
+                    event.expenses.push({
+                        id: this.generateId(),
+                        participantId: participantId,
+                        amount: parseFloat(amount),
+                        description: description,
+                        date: new Date().toISOString()
+                    });
+                    this.updateParticipantTotal(event, participantId);
+                    this.saveEvents();
+                }
+            }
+
+            removeExpense(eventId, expenseId) {
+                const event = this.getEvent(eventId);
+                if (event) {
+                    const expense = event.expenses.find(e => e.id === expenseId);
+                    event.expenses = event.expenses.filter(e => e.id !== expenseId);
+                    if (expense) {
+                        this.updateParticipantTotal(event, expense.participantId);
+                    }
+                    this.saveEvents();
+                }
+            }
+
+            updateParticipantTotal(event, participantId) {
+                const participant = event.participants.find(p => p.id === participantId);
+                if (participant) {
+                    participant.totalSpent = event.expenses
+                        .filter(e => e.participantId === participantId)
+                        .reduce((sum, e) => sum + e.amount, 0);
+                }
+            }
+
+            calculateSettlement(eventId) {
+                const event = this.getEvent(eventId);
+                if (!event || event.participants.length === 0) return [];
+
+                const totalSpent = event.expenses.reduce((sum, e) => sum + e.amount, 0);
+                const perPerson = totalSpent / event.participants.length;
+
+                const balances = event.participants.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    spent: p.totalSpent,
+                    owes: perPerson,
+                    balance: p.totalSpent - perPerson
+                }));
+
+                const settlements = [];
+                const debtors = balances.filter(b => b.balance < 0).sort((a, b) => a.balance - b.balance);
+                const creditors = balances.filter(b => b.balance > 0).sort((a, b) => b.balance - a.balance);
+
+                let debtorIdx = 0;
+                let creditorIdx = 0;
+
+                while (debtorIdx < debtors.length && creditorIdx < creditors.length) {
+                    const debtor = debtors[debtorIdx];
+                    const creditor = creditors[creditorIdx];
+
+                    const amount = Math.min(Math.abs(debtor.balance), creditor.balance);
+
+                    settlements.push({
+                        from: debtor.name,
+                        to: creditor.name,
+                        amount: amount.toFixed(2)
+                    });
+
+                    debtor.balance += amount;
+                    creditor.balance -= amount;
+
+                    if (Math.abs(debtor.balance) < 0.01) debtorIdx++;
+                    if (creditor.balance < 0.01) creditorIdx++;
+                }
+
+                return settlements;
+            }
+
+            archiveEvent(eventId) {
+                const event = this.getEvent(eventId);
+                if (event) {
+                    event.archived = true;
+                    this.saveEvents();
+                }
+            }
+
+            deleteEvent(eventId) {
+                this.events = this.events.filter(e => e.id !== eventId);
+                this.saveEvents();
+            }
+
+            getActiveEvents() {
+                return this.events.filter(e => !e.archived);
+            }
+
+            getArchivedEvents() {
+                return this.events.filter(e => e.archived);
+            }
+        }
+
+        const app = new AlmanUsulu();
+
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            btn.classList.add('active');
+
+            if (tabName === 'events') {
+                renderEventsList();
+            } else {
+                renderArchiveList();
+            }
+        }
+
+        function createEvent() {
+            const name = document.getElementById('eventName').value.trim();
+            if (!name) {
+                alert('Lütfen etkinlik adı girin!');
+                return;
+            }
+
+            app.createEvent(name);
+            document.getElementById('eventName').value = '';
+            renderEventsList();
+        }
+
+        function renderEventsList() {
+            const container = document.getElementById('eventsList');
+            const activeEvents = app.getActiveEvents();
+
+            if (activeEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>Henüz etkinlik yok. Yeni bir etkinlik oluşturun!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = activeEvents.map(event => {
+                const totalSpent = event.expenses.reduce((sum, e) => sum + e.amount, 0);
+                return `
+                    <div class="event-card">
+                        <h3>${event.name}</h3>
+                        <p>👥 ${event.participants.length} kişi</p>
+                        <p>💰 Toplam: ${totalSpent.toFixed(2)} ₺</p>
+                        <div class="actions">
+                            <button class="btn-success" onclick="openEventModal('${event.id}')">Detaylar</button>
+                            <button class="btn-danger" onclick="deleteEventConfirm('${event.id}')">Sil</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderArchiveList() {
+            const container = document.getElementById('archiveList');
+            const archivedEvents = app.getArchivedEvents();
+
+            if (archivedEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>Arşivlenmiş etkinlik yok.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = archivedEvents.map(event => {
+                const totalSpent = event.expenses.reduce((sum, e) => sum + e.amount, 0);
+                return `
+                    <div class="event-card" style="opacity: 0.8;">
+                        <h3>${event.name}</h3>
+                        <p>👥 ${event.participants.length} kişi</p>
+                        <p>💰 Toplam: ${totalSpent.toFixed(2)} ₺</p>
+                        <div class="actions">
+                            <button class="btn-secondary" onclick="restoreEvent('${event.id}')">Geri Getir</button>
+                            <button class="btn-danger" onclick="deleteEventConfirm('${event.id}')">Kalıcı Sil</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openEventModal(eventId) {
+            app.currentEventId = eventId;
+            const event = app.getEvent(eventId);
+            const settlements = app.calculateSettlement(eventId);
+            const totalSpent = event.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const perPerson = event.participants.length > 0 ? totalSpent / event.participants.length : 0;
+
+            let html = `
+                <div class="modal-header">
+                    <button class="close-btn" onclick="closeEventModal()">&times;</button>
+                    ${event.name}
+                </div>
+
+                <div class="summary">
+                    <div class="summary-item">
+                        <span>Toplam Harcama:</span>
+                        <strong>${totalSpent.toFixed(2)} ₺</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Kişi Başına:</span>
+                        <strong>${perPerson.toFixed(2)} ₺</strong>
+                    </div>
+                </div>
+
+                <h3>👥 Katılımcılar</h3>
+                <div class="form-group">
+                    <input type="text" id="newParticipant" placeholder="Katılımcı adını girin" onkeypress="if(event.key==='Enter') addParticipantToEvent()">
+                    <button class="btn-success" onclick="addParticipantToEvent()">Ekle</button>
+                </div>
+
+                <div class="participant-list">
+                    ${event.participants.length === 0 ? '<p style="text-align: center; color: #999;">Henüz katılımcı yok</p>' : ''}
+                    ${event.participants.map(p => `
+                        <div class="participant-item">
+                            <div class="participant-info">
+                                <div class="name">${p.name}</div>
+                                <div class="amount">Harcadı: ${p.totalSpent.toFixed(2)} ₺</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="btn-danger" style="padding: 6px 12px;" onclick="removeParticipantFromEvent('${p.id}')">Kaldır</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <h3 style="margin-top: 25px;">💸 Giderler</h3>
+                <div class="form-group">
+                    <label>Kim Ödedi?</label>
+                    <select id="expensePayer">
+                        <option value="">Seçin...</option>
+                        ${event.participants.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Miktar (₺)</label>
+                    <input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Açıklama</label>
+                    <input type="text" id="expenseDesc" placeholder="örn: Yemek, Ulaşım..." onkeypress="if(event.key==='Enter') addExpenseToEvent()">
+                </div>
+                <button class="btn-success" onclick="addExpenseToEvent()">Gider Ekle</button>
+
+                <div class="expense-list" style="margin-top: 20px;">
+                    ${event.expenses.length === 0 ? '<p style="text-align: center; color: #999;">Henüz gider yok</p>' : ''}
+                    ${event.expenses.map(e => {
+                        const payer = event.participants.find(p => p.id === e.participantId);
+                        return `
+                            <div class="expense-item">
+                                <div class="expense-info">
+                                    <div class="payer">${payer ? payer.name : 'Bilinmiyor'}</div>
+                                    <div class="description">${e.description}</div>
+                                    <div class="amount">${e.amount.toFixed(2)} ₺</div>
+                                </div>
+                                <button class="btn-danger" style="padding: 6px 12px; height: fit-content;" onclick="removeExpenseFromEvent('${e.id}')">Sil</button>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            if (settlements.length > 0) {
+                html += `
+                    <h3 style="margin-top: 25px;">✅ Ödenmesi Gereken</h3>
+                    <div>
+                        ${settlements.map(s => `
+                            <div class="settlement">
+                                <span>${s.from} <strong>→</strong> ${s.to}</span>
+                                <strong>${s.amount} ₺</strong>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn-warning" onclick="archiveEventConfirm('${eventId}')">📦 Arşivle</button>
+                    <button class="btn-danger" onclick="deleteEventConfirm('${eventId}')">🗑️ Sil</button>
+                </div>
+            `;
+
+            document.getElementById('eventDetailContent').innerHTML = html;
+            document.getElementById('eventModal').classList.add('active');
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.remove('active');
+            app.currentEventId = null;
+        }
+
+        function addParticipantToEvent() {
+            const name = document.getElementById('newParticipant').value.trim();
+            if (!name) {
+                alert('Katılımcı adı girin!');
+                return;
+            }
+            app.addParticipant(app.currentEventId, name);
+            document.getElementById('newParticipant').value = '';
+            openEventModal(app.currentEventId);
+        }
+
+        function removeParticipantFromEvent(participantId) {
+            if (confirm('Bu katılımcıyı kaldırmak istediğinize emin misiniz?')) {
+                app.removeParticipant(app.currentEventId, participantId);
+                openEventModal(app.currentEventId);
+            }
+        }
+
+        function addExpenseToEvent() {
+            const payerId = document.getElementById('expensePayer').value;
+            const amount = document.getElementById('expenseAmount').value;
+            const description = document.getElementById('expenseDesc').value.trim();
+
+            if (!payerId) {
+                alert('Lütfen ödeyeni seçin!');
+                return;
+            }
+            if (!amount || parseFloat(amount) <= 0) {
+                alert('Lütfen geçerli bir miktar girin!');
+                return;
+            }
+            if (!description) {
+                alert('Lütfen açıklama girin!');
+                return;
+            }
+
+            app.addExpense(app.currentEventId, payerId, amount, description);
+            document.getElementById('expensePayer').value = '';
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDesc').value = '';
+            openEventModal(app.currentEventId);
+        }
+
+        function removeExpenseFromEvent(expenseId) {
+            if (confirm('Bu gideri silmek istediğinize emin misiniz?')) {
+                app.removeExpense(app.currentEventId, expenseId);
+                openEventModal(app.currentEventId);
+            }
+        }
+
+        function archiveEventConfirm(eventId) {
+            if (confirm('Bu etkinliği arşivlemek istediğinize emin misiniz?')) {
+                app.archiveEvent(eventId);
+                closeEventModal();
+                renderEventsList();
+            }
+        }
+
+        function restoreEvent(eventId) {
+            if (confirm('Bu etkinliği geri getirmek istediğinize emin misiniz?')) {
+                const event = app.getEvent(eventId);
+                if (event) {
+                    event.archived = false;
+                    app.saveEvents();
+                    renderArchiveList();
+                }
+            }
+        }
+
+        function deleteEventConfirm(eventId) {
+            if (confirm('Bu etkinliği kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
+                app.deleteEvent(eventId);
+                closeEventModal();
+                renderEventsList();
+                renderArchiveList();
+            }
+        }
+
+        // Initial render
+        renderEventsList();
+    </script>
+</body>
+</html>

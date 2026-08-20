@@ -1,0 +1,19 @@
+{
+  "name": "alman-usulu",
+  "version": "1.0.0",
+  "description": "Grup gider paylaştırıcı - Alman Usulü",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": [
+    "gider",
+    "paylaştır",
+    "grup",
+    "etkinlik",
+    "alman"
+  ],
+  "author": "Sezer Yıldırır",
+  "license": "MIT"
+}
